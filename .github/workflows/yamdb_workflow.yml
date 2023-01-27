@@ -51,7 +51,7 @@ jobs:
           context: ./api_yamdb/
           file: api_yamdb/Dockerfile
           push: true
-          tags: wests007/yamdb_final:latest
+          tags: Anton0530212/yamdb_final:latest
 
   deploy:
     runs-on: ubuntu-latest
