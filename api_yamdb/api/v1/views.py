@@ -1,37 +1,24 @@
+from api.v1.filters import TitleFilter
+from api.v1.permissions import AdminOnly, IsAuthorOrStaffOrReadOnly, ReadOnly
+from api.v1.serializers import (ApiTokenSerializer, CategorySerializer,
+                                CommentSerializer, GenreSerializer,
+                                ReviewSerializer, SendMailSerializer,
+                                TitleReadSerializer, TitleWriteSerializer,
+                                UserSerializer)
 from django.db import IntegrityError
 from django.db.models import Avg
-from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, filters, mixins
-from rest_framework.decorators import api_view, permission_classes, action
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, status, viewsets
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
-
-from reviews.models import Title, Genre, Category, Review
+from reviews.models import Category, Genre, Review, Title
 from users.models import User
-from users.utils import (
-    generate_activation_code,
-    send_mail_in_user,
-    token_verification,
-)
-from api.v1.serializers import (
-    TitleReadSerializer,
-    TitleWriteSerializer,
-    GenreSerializer,
-    CategorySerializer,
-    ReviewSerializer,
-    CommentSerializer,
-    SendMailSerializer,
-    ApiTokenSerializer,
-    UserSerializer,
-)
-from api.v1.permissions import AdminOnly, IsAuthorOrStaffOrReadOnly, ReadOnly
-from api.v1.filters import TitleFilter
+from users.utils import (generate_activation_code, send_mail_in_user,
+                         token_verification)
 
 
 class TitleViewSet(viewsets.ModelViewSet):

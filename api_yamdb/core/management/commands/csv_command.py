@@ -1,11 +1,10 @@
-import os
 import csv
+import os
 
+from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
-from django.conf import settings
-
-from reviews.models import Title, Genre, Category, Review, Comment, TitleGenre
+from reviews.models import Category, Comment, Genre, Review, Title, TitleGenre
 from users.models import User
 
 DATA_LIST = {
