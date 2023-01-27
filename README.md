@@ -135,4 +135,4 @@ MIT
 [Андрей Пахомов](https://github.com/pakhem), 
 [Антон Плотицын](https://github.com/Anton0530212)
 
-![workflow](https://github.com/wests007/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg?event=push)
+![workflow](https://github.com/Anton0530212/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg?event=push)
