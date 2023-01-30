@@ -1,6 +1,6 @@
 ![workflow](https://github.com/Anton0530212/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg?event=push) 
 
-# REST API для проекта YaMDb
+# REST API для проекта YaMDb 
 
 ## _Описание_ 
 API для Yatube - это проект, позволяющий собирать отзывы пользователей на различные произведения.  
