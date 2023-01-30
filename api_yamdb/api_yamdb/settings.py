@@ -1,11 +1,9 @@
-from dotenv import load_dotenv
-
 import os
 from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-EMAIL_BACKEND: os.getenv('EMAIL_BACKEND', default='EMAIL_BACKEND')
+EMAIL_BACKEND: os.getenv('EMAIL_BACKEND', default='django.core.mail.backends.filebased.EmailBackend')
 
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
@@ -13,7 +11,7 @@ DEFAULT_FROM_EMAIL = 'yamdb@ya.ru'
 
 RESERVED_NAME = 'me'
 
-SECRET_KEY: os.getenv('SECRET_KEY', default='SECRET_KEY')
+SECRET_KEY: os.getenv('SECRET_KEY', default='p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs')
 
 DEBUG = False
 
