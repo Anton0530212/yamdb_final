@@ -6,8 +6,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND',
                           default='django.core.mail.backends.filebased.EmailBackend')
 
-#EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
-
 EMAIL_HOST = os.getenv('mail.tempmail.us.com')
 
 EMAIL_PORT = os.getenv('25')
