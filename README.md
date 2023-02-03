@@ -1,4 +1,4 @@
-![workflow](https://github.com/Anton0530212/yamdb_final/blob/master/.github/workflows/yamdb_workflow.yml) 
+![workflow status](https://github.com/Anton0530212/yamdb_final/blob/master/.github/workflows/yamdb_workflow.yml/badge.svg?event=push)
 
 
 Это итоговый проект 16-го спринта. 
