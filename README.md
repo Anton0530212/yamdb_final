@@ -1,21 +1,151 @@
-![workflow status](https://github.com/Anton0530212/yamdb_final/blob/master/.github/workflows/yamdb_workflow.yml/badge.svg?event=push)
+![workflow](https://github.com/Anton0530212/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg?event=push)
 
 
-Это итоговый проект 16-го спринта. 
-Задача: автотест на гитхаб экшн. Для развертывания проекта: 
-   1.установите docker и docker-compose последней версии 
-   2.перейдите в настройки гитхаба и создайте секретные ключи:
+# REST API для проекта YaMDb
 
-DB_ENGINE=django.db.backends.postgresql DB_NAME=postgres POSTGRES_USER= логин_для_пользователя POSTGRES_PASSWORD= пароль_для_пользователя DB_HOST=db DB_PORT=5432 далее откройте терминал, перейдите в папку yamdb_final/infra и пропишите команды: docker-compose up docker-compose exec web python manage.py migrate docker-compose exec web python manage.py createsuperuser docker-compose exec web python manage.py collectstatic --no-input если имеется бд: sudo docker cp путь_на_сервере/fixture.json контейнер:путь_в_контейнере/fixture.json sudo docker-compose exec web python manage.py loaddata fixtures2.json
+## Описание
+Простой, надежный и понятный API социальной сети с базой данных отзывов к произведениям.
 
-автотест:
+## Технологии
+Python 3,
+Django 2.2,
+Django REST Framework,
+Simple-JWT
 
-   проверка кода на PEP через flake8
-   проверка внутренних тестов django
-   сборка образа и пуш на докер хаб
-   деплой на рабочий сервер
-   при этом, необходимо добавить переменные окружения (settings в репозитории github->secrets and variables->actions)
+### Шаблон наполнения env-файла:
+```
+DB_ENGINE=... # указываем, что работаем с postgresql
+DB_NAME=... # имя базы данных
+POSTGRES_USER=... # логин для подключения к базе данных
+POSTGRES_PASSWORD=... # пароль для подключения к БД (установите свой)
+DB_HOST=... # название сервиса (контейнера)
+DB_PORT=... # порт для подключения к БД
+```
 
-DB_ENGINE-не обязательно-django.db.backends.postgresql DB_HOST-не обязательно-db DB_NAME-не обязательно-postgres DB_PORT-не обязательно-5432 POSTGRES_PASSWORD--не обязательно-ваш пароль от бд POSTGRES_USER-не обязательно-ваш логин от бд DEBUG- False либо True-режим дебага в settings.py django приложения DOCKER_PASSWORD-пароль от докер хаб DOCKER_USERNAME-логин от докер хаб USER-юзернейм для подключения к боевому серверу HOST-ip адрес боевого сервера SECRET_KEY-secret key в settings.py django приложения SSH_KEY- ssh key вашего компьютера TELEGRAM_TO-ваш телеграм id TELEGRAM_TOKEN-телеграм токен вашего бота для уведомления
+### Как запустить проект:
+Клонировать репозиторий и перейти в него в командной строке:
+```
+git clone https://github.com/Wests007/api_yamdb.git
+```
+```
+cd infra_sp2
+```
+Запустить приложение через docker-контейнеры:
+```
+cd infra
+```
+```
+docker-compose up -d --build
+```
+Выполнить миграции и собрать статику:
+```
+docker-compose exec web python manage.py migrate
+```
+```
+docker-compose exec web python manage.py collectstatic --no-input
+```
+При необходимости, БД возможно наполнить тестовыми данными:
+```
+docker-compose exec web python manage.py import_csv_to_db
+```
+Остановить работу контейнеров и удалить их (сохранив образы):
+```
+docker-compose down -v
+```
 
-проект развернут на 158.160.34.14/redoc/
+### Полная документация запросов к API доступна после запуска сервера по адресу:
+```
+http://localhost/redoc
+```
+
+### Примеры запросов к API:
+
+- Регистрация
+POST /api/v1/auth/signup/
+```
+{
+    "email": "string",
+    "username": "string"
+}
+```
+
+- Получение токена
+POST /api/v1/auth/token/
+```
+{
+    "username": "string",
+    "confirmation_code": "string"
+}
+```
+
+- Редактирование пользовательского профиля
+PATCH /api/v1/users/me/
+```
+{
+    "username": "string",
+    "email": "user@example.com",
+    "first_name": "string",
+    "last_name": "string",
+    "bio": "string"
+}
+```
+
+- Получение списка всех категорий
+GET /api/v1/categories/
+```
+[
+    {
+        "count": 0,
+        "next": "string",
+        "previous": "string",
+        "results":
+            [
+                {
+                    "name": "string",
+                    "slug": "string"
+                }
+            ]
+    }
+]
+```
+
+- Получение списка всех жанров
+GET /api/v1/genres/
+```
+[
+    {
+        "count": 0,
+        "next": "string",
+        "previous": "string",
+        "results":
+            [
+                {
+                    "name": "string",
+                    "slug": "string"
+                }
+            ]
+    }
+]
+```
+
+- Добавление нового отзыва
+POST /api/v1/titles/{title_id}/reviews/
+```
+{
+    "text": "string",
+    "score": 1
+}
+```
+
+- Добавление комментария к отзыву
+POST /api/v1/titles/{title_id}/reviews/{review_id}/comments/
+```
+{
+    "text": "string"
+}
+```
+
+## Авторы:
+[Левина Юля](https://github.com/JulLevina),
+[Андрей Пахомов](https://github.com/pakhem),
+[Антон Плотицын](https://github.com/Anton0530212)
