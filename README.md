@@ -7,10 +7,10 @@
 Простой, надежный и понятный API социальной сети с базой данных отзывов к произведениям.
 
 ## Технологии
-Python 3,
-Django 2.2,
-Django REST Framework,
-Simple-JWT
+- Python 3.7
+- Django 2.2.16
+- DRF 3.12.4
+- Simple-JWT
 
 ### Шаблон наполнения env-файла:
 ```
@@ -25,7 +25,7 @@ DB_PORT=... # порт для подключения к БД
 ### Как запустить проект:
 Клонировать репозиторий и перейти в него в командной строке:
 ```
-git clone https://github.com/Wests007/api_yamdb.git
+git clone https://github.com/Anton0530212/yamdb_final
 ```
 ```
 cd infra_sp2
@@ -53,97 +53,95 @@ docker-compose exec web python manage.py import_csv_to_db
 docker-compose down -v
 ```
 
-### Полная документация запросов к API доступна после запуска сервера по адресу:
-```
-http://localhost/redoc
-```
+#### _Алгоритм регистрации пользователей_
+1. Пользователь отправляет POST-запрос на добавление нового пользователя с параметрами email и username на эндпоинт /api/v1/auth/signup/.
+2. YaMDB отправляет письмо с кодом подтверждения (confirmation_code) на адрес email.
+3. Пользователь отправляет POST-запрос с параметрами username и confirmation_code на эндпоинт /api/v1/auth/token/, в ответе на запрос ему приходит token (JWT-токен).
+4. При желании пользователь отправляет PATCH-запрос на эндпоинт /api/v1/users/me/ и заполняет поля в своём профайле (описание полей — в документации).
 
-### Примеры запросов к API:
-
-- Регистрация
-POST /api/v1/auth/signup/
+- Запрос на регистрацию пользователя:
+```
+POST auth/signup/
+```
+```
+body:
+{
+    "username": "Test_User",
+    "email": "Test_email@test.ru"
+}
+```
+- вернет следующий ответ
 ```
 {
-    "email": "string",
-    "username": "string"
+    "username": "Test_User",
+    "email": "Test_email@test.ru"
 }
 ```
 
-- Получение токена
-POST /api/v1/auth/token/
+#### _Примеры запросов к API для неавторизованных пользователей_
+Неавторизованные пользователи могут просматривать описания произведений, читать отзывы и комментарии.
+- Пример запроса на получения информации о произведении по id:
+```
+GET api/v1/titles/{titles_id}/
+```
+- Ответ:
 ```
 {
-    "username": "string",
-    "confirmation_code": "string"
-}
-```
-
-- Редактирование пользовательского профиля
-PATCH /api/v1/users/me/
-```
-{
-    "username": "string",
-    "email": "user@example.com",
-    "first_name": "string",
-    "last_name": "string",
-    "bio": "string"
-}
-```
-
-- Получение списка всех категорий
-GET /api/v1/categories/
-```
-[
-    {
-        "count": 0,
-        "next": "string",
-        "previous": "string",
-        "results":
-            [
-                {
-                    "name": "string",
-                    "slug": "string"
-                }
-            ]
+    "id": 0,
+    "name": "string",
+    "year": "test_text",
+    "rating": "string"
+    "description": "string",
+    "genre": [
+        {...}
+    ],
+    "category": {
+    "name": "string",
+    "slug": "string"
     }
-]
+}
 ```
 
-- Получение списка всех жанров
-GET /api/v1/genres/
+#### _Примеры запросов к API для авторизованных пользователей_
+Авторизованные пользователи наделены правом создания, изменения и удаления отзывов и комментариев, авторами которого они являются.
+- Для авторизации зарегистрированному пользователю, получившему на указанную при регистрации эл.почту код подтверждения, необходимо получить JWT-токен с помощью следующего запроса
 ```
-[
-    {
-        "count": 0,
-        "next": "string",
-        "previous": "string",
-        "results":
-            [
-                {
-                    "name": "string",
-                    "slug": "string"
-                }
-            ]
-    }
-]
+POST api/v1/auth/token/
+```
+```
+body:
+{
+    "username": "Test_User",
+    confirmation_code": "string"
+}
 ```
 
-- Добавление нового отзыва
-POST /api/v1/titles/{title_id}/reviews/
+"access" - поле, содержащее токен.
+
+- Запрос на создание отзыва на произведение:
 ```
+POST api/v1/titles/{titles_id}/reviews/
+```
+```
+body:
 {
     "text": "string",
     "score": 1
 }
 ```
-
-- Добавление комментария к отзыву
-POST /api/v1/titles/{title_id}/reviews/{review_id}/comments/
+- вернет следующий ответ
 ```
 {
-    "text": "string"
+    "id": 0,
+    "text": "string",
+    "author": "string",
+    "score": 1,
+    "pub_date": "2019-08-24T14:15:22Z"
 }
 ```
+- С примерами других запросов можно ознакомиться в [документации](http://158.160.34.14/redoc/)
+- Подробнее про установку DRF можно почитать [здесь](https://github.com/encode/django-rest-framework/blob/master/README.md )
+
 
 ## Авторы:
 [Левина Юля](https://github.com/JulLevina),
